@@ -26,6 +26,9 @@ public class AssignmentTemplate extends Application {
 	TabPane root;
 	BorderPane tab1Pane;
 	Tab tab1, tab2;
+	Label questionLabel;
+	Button answers[] = new Button[4];
+
 
 	public void start(Stage stage) throws Exception {
 		stage.setTitle("Software Architectures – Petar Stanev");
@@ -93,33 +96,30 @@ public class AssignmentTemplate extends Application {
 		questionBox.setPadding(new Insets(10));
 		tab1Pane.setTop(questionBox);
 
-		Label question = new Label("4 + 3 = ");
-		question.setStyle("-fx-font: 48 arial; -fx-base: #b6e7c9;");
+		questionLabel = new Label();
+		questionLabel.setStyle("-fx-font: 48 arial; -fx-base: #b6e7c9;");
 		
-		questionBox.getChildren().add(question);
+		questionBox.getChildren().add(questionLabel);
 		HBox answersBox = new HBox(10);
 		answersBox.setAlignment(Pos.CENTER);
 		answersBox.setPadding(new Insets(10));
 		tab1Pane.setBottom(answersBox);
 
-		Button answer1 = new Button("1");
-		answer1.setStyle("-fx-font: 48 arial; -fx-base: #b6e7c9;");
-		answersBox.getChildren().add(answer1);
-
-		Button answer2 = new Button("2");
-		answer2.setStyle("-fx-font: 48 arial; -fx-base: #b6e7c9;");
-		answersBox.getChildren().add(answer2);
-
-		Button answer3 = new Button("3");
-		answer3.setStyle("-fx-font: 48 arial; -fx-base: #b6e7c9;");
-		answersBox.getChildren().add(answer3);
-
-		Button answer4 = new Button("4");
-		answer4.setStyle("-fx-font: 48 arial; -fx-base: #b6e7c9;");
-		answersBox.getChildren().add(answer4);
+		for (int i = 0; i < answers.length; i++) {
+			answers[i] = new Button();
+			answers[i].setStyle("-fx-font: 48 arial; -fx-base: #b6e7c9;");
+			answersBox.getChildren().add(answers[i]);
+		}
+		
+		generateQuestion(4);
 	}
 	
-	public void generateQuestion(){
+	public void generateQuestion(int maximumNumber){
+		Question question = new Question(maximumNumber);
+		questionLabel.setText(question.getQuestion());
 		
+		for (int i = 0; i < answers.length; i++) {
+			answers[i].setText(Integer.toString(question.getAnswer(i)));
+		}
 	}
 }
