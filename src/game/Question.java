@@ -10,7 +10,7 @@ import java.util.Random;
  */
 public class Question {
 	private int answers[];
-	private int firstNumber, secondNumber, correctAnswer, maximumNumber;
+	private int firstNumber, secondNumber, correctAnswer,correctAnswerPositon, maximumNumber;
 	private char symbol;
 	private Random randomGenerator;
 
@@ -37,6 +37,10 @@ public class Question {
 
 	public int getCorrectAnswer() {
 		return correctAnswer;
+	}
+	
+	public int getCorrectAnswerPositon() {
+		return correctAnswerPositon;
 	}
 
 	public String getQuestion() {
@@ -83,20 +87,19 @@ public class Question {
 
 	private void generateAnswers() {
 		answers = new int[4];
-		int correctAnswerPositon = randomGenerator.nextInt(answers.length);
+		correctAnswerPositon = randomGenerator.nextInt(answers.length);
 		answers[correctAnswerPositon] = correctAnswer;
 
 		for (int i = 0; i < answers.length; i++) {
 			if (i != correctAnswerPositon)
 				answers[i] = generateUniqueAnswer();
 		}
-		System.out.println();
 	}
 
 	private int generateUniqueAnswer() {
 		int testAnswer;
 		do {
-			testAnswer = randomGenerator.nextInt(maximumNumber);
+			testAnswer = randomGenerator.nextInt(maximumNumber*2);
 		} while (contains(testAnswer));
 
 		return testAnswer;
