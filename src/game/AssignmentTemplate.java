@@ -11,7 +11,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -28,7 +31,8 @@ public class AssignmentTemplate extends Application {
 	private Tab tab1, tab2;
 	private Label questionLabel,scoreLabel;
 	private Button answersButtons[] = new Button[4];
-	private int score;
+	private int score,difficulty=0;
+	private ToggleGroup dificultyToggleGroup;
 
 	public void start(Stage stage) throws Exception {
 		stage.setTitle("Software Architectures – Petar Stanev");
@@ -69,21 +73,53 @@ public class AssignmentTemplate extends Application {
 	}
 
 	public void setUpStartScreen() {
-		Button startGame = new Button("startGame");
-		startGame.setStyle("-fx-font: 48 arial; -fx-base: #b6e7c9;");
+		BorderPane menu = new BorderPane();
+		Button startGameButton = new Button("startGame");
+		dificultyToggleGroup = new ToggleGroup();
+		startGameButton.setStyle("-fx-font: 48 arial; -fx-base: #b6e7c9;");
 
-		startGame.setOnAction(new EventHandler<ActionEvent>() {
+		startGameButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
-				startGame.setVisible(false);
+				startGameButton.setVisible(false);
+				
 				setUpGame();
 			}
 		});
+		menu.setCenter(startGameButton);
+		
 
-		tab1Pane.setCenter(startGame);
+		
+		String[] difficulties = {"Easy","Normal","Hard"};
+		FlowPane difficultyButtons = new FlowPane();
+		
+		
+		difficultyButtons.setAlignment(Pos.CENTER);
+		
+		ToggleButton tb1;
+		for (int i = 0; i < difficulties.length; i++) {
+			tb1 = new ToggleButton(difficulties[i]);
+			tb1.setStyle("-fx-font: 32 arial; -fx-base: #b6e7c9;");
+			if (i == difficulty) {
+				
+			}
+			tb1.setSelected(true);
+			tb1.setToggleGroup(dificultyToggleGroup);
+			difficultyButtons.getChildren().add(tb1);
+		}
+		difficultyButtons.setPadding(new Insets(30));
+		
+		
+		tab1Pane.setCenter(menu);
+		tab1Pane.setBottom(difficultyButtons);
+	}
+	
+	private void setDifficulty(int difficulty){
+		this.difficulty = difficulty;
 	}
 
 	public void setUpGame() {
+System.out.println(dificultyToggleGroup.getSelectedToggle().getUserData());
 		scoreLabel = new Label("Score: " + score);
 		scoreLabel.setStyle("-fx-font: 32 arial; -fx-base: #b6e7c9;");
 		scoreLabel.setAlignment(Pos.CENTER);
