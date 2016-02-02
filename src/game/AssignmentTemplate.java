@@ -32,9 +32,9 @@ public class AssignmentTemplate extends Application {
 	private Label questionLabel, scoreLabel, difficultyLabel;
 	private Button answersButtons[] = new Button[4];
 	private int score, difficulty, counter;
+	private QuestionFactory questionFactory;
 
-	// private ToggleGroup dificultyToggleGroup;
-
+	
 	public void start(Stage stage) throws Exception {
 		stage.setTitle("Software Architectures – Petar Stanev");
 		root = new TabPane();
@@ -88,25 +88,6 @@ public class AssignmentTemplate extends Application {
 		});
 		menu.setCenter(startGameButton);
 
-		// String[] difficulties = {"Easy","Normal","Hard"};
-		// FlowPane difficultyButtons = new FlowPane();
-		//
-		//
-		// difficultyButtons.setAlignment(Pos.CENTER);
-		//
-		// ToggleButton tb1;
-		// for (int i = 0; i < difficulties.length; i++) {
-		// tb1 = new ToggleButton(difficulties[i]);
-		// tb1.setStyle("-fx-font: 32 arial; -fx-base: #b6e7c9;");
-		// if (i == difficulty) {
-		//
-		// }
-		// tb1.setSelected(true);
-		// tb1.setToggleGroup(dificultyToggleGroup);
-		// difficultyButtons.getChildren().add(tb1);
-		// }
-		// difficultyButtons.setPadding(new Insets(30));
-
 		tab1Pane.setCenter(menu);
 		// tab1Pane.setBottom(difficultyButtons);
 	}
@@ -151,11 +132,12 @@ public class AssignmentTemplate extends Application {
 		// other
 		difficulty = 0;
 		counter = 0;
-		generateQuestion(10);
+		questionFactory = new QuestionFactory();
+		generateQuestion();
 	}
 
-	public void generateQuestion(int maximumNumber) {
-		Question question = new Question(maximumNumber, difficulty);
+	public void generateQuestion() {
+		Question question = questionFactory.getQuestion(difficulty);
 		questionLabel.setText(question.getQuestion());
 
 		for (int i = 0; i < answersButtons.length; i++) {
@@ -165,13 +147,13 @@ public class AssignmentTemplate extends Application {
 					@Override
 					public void handle(ActionEvent event) {
 						counter++;
-						if (counter == 5 && difficulty < 3) {
+						if (counter == 5 && difficulty < 2) {
 							difficulty++;
 							updateDifficulty();
 							counter = 0;
 						}
 
-						generateQuestion(10);
+						generateQuestion();
 						updateScore(100);
 					}
 				});
@@ -182,7 +164,7 @@ public class AssignmentTemplate extends Application {
 					public void handle(ActionEvent event) {
 						updateScore(-50);
 						if (difficulty>0) {
-							difficulty--;
+						//	difficulty--;
 							updateDifficulty();
 						}
 					}
@@ -207,8 +189,6 @@ public class AssignmentTemplate extends Application {
 		case 1:
 			return "Normal (+ -)";
 		case 2:
-			return "Hard (+ - *)";
-		case 3:
 			return "Hardest (+ - * /)";
 		}
 		return "";

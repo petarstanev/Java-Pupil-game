@@ -1,6 +1,5 @@
 package game;
 
-import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -8,22 +7,15 @@ import java.util.Random;
  * 
  * @author Petar Stanev
  */
-public class Question {
-	private int answers[];
-	private int firstNumber, secondNumber, correctAnswer, correctAnswerPositon;
-	private int maximumNumber, difficulty;
-	private char symbol;
-	private Random randomGenerator;
+public abstract class Question {
+	protected int answers[];
+	protected int firstNumber, secondNumber, correctAnswer, correctAnswerPositon;
+	protected static final int MAX_NUMBER = 20;
+	protected char symbol;
+	protected Random randomGenerator;
 
-	public Question(int[] answers, int correctAnswer) {
-		this.answers = answers;
-		this.correctAnswer = correctAnswer;
-	}
-
-	public Question(int maximumNumber, int difficulty) {
+	public Question() {
 		randomGenerator = new Random();
-		this.maximumNumber = maximumNumber;
-		this.difficulty = difficulty;
 		generateQuestion();
 		generateCorrectAnswer();
 		generateAnswers();
@@ -49,29 +41,7 @@ public class Question {
 		return firstNumber + " " + symbol + " " + secondNumber;
 	}
 
-	private void generateQuestion() {
-
-		firstNumber = randomGenerator.nextInt(maximumNumber);
-		secondNumber = randomGenerator.nextInt(maximumNumber);
-	
-		int test = difficulty;
-		test++;
-	
-		switch (randomGenerator.nextInt(test)) {
-		case 0:
-			symbol = '+';
-			break;
-		case 1:
-			symbol = '-';
-			break;
-		case 2:
-			symbol = '*';
-			break;
-		case 3:
-			symbol = '/';
-			break;
-		}
-	}
+	public abstract void generateQuestion();
 
 	private void generateCorrectAnswer() {
 		switch (symbol) {
@@ -104,10 +74,31 @@ public class Question {
 	private int generateUniqueAnswer() {
 		int testAnswer;
 		do {
-			testAnswer = randomGenerator.nextInt(maximumNumber * 2);
+			testAnswer = randomGenerator.nextInt((int) (MAX_NUMBER * 1.5));
 		} while (contains(testAnswer));
 
 		return testAnswer;
+	}
+	
+	protected void generateUniqueNumbersForAddition(){
+		firstNumber = randomGenerator.nextInt(50);
+		secondNumber = randomGenerator.nextInt(50);
+	}
+	
+	protected void generateUniqueNumbersForSubtraction(){
+		firstNumber = randomGenerator.nextInt(100);
+		secondNumber = randomGenerator.nextInt(firstNumber);
+	}
+	
+	protected void generateUniqueNumbersForMultiplication(){
+		firstNumber = randomGenerator.nextInt(10);
+		secondNumber = randomGenerator.nextInt(10);
+	}
+	
+	protected void generateUniqueNumbersForDivision(){
+		int save = 	 randomGenerator.nextInt(10)+1;
+		secondNumber = randomGenerator.nextInt(10)+1;
+		firstNumber = save * secondNumber;
 	}
 
 	private boolean contains(int test) {
@@ -118,4 +109,5 @@ public class Question {
 		}
 		return false;
 	}
+
 }
