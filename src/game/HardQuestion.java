@@ -4,9 +4,6 @@ public class HardQuestion extends Question {
 
 	@Override
 	public void generateQuestion() {
-		firstNumber = randomGenerator.nextInt(MAX_NUMBER);
-		secondNumber = randomGenerator.nextInt(MAX_NUMBER);
-
 		switch (randomGenerator.nextInt(4)) {
 		case 0:
 			generateUniqueNumbersForAddition();

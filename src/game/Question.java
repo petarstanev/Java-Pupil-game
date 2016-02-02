@@ -10,7 +10,6 @@ import java.util.Random;
 public abstract class Question {
 	protected int answers[];
 	protected int firstNumber, secondNumber, correctAnswer, correctAnswerPositon;
-	protected static final int MAX_NUMBER = 20;
 	protected char symbol;
 	protected Random randomGenerator;
 
@@ -21,6 +20,8 @@ public abstract class Question {
 		generateAnswers();
 	}
 
+	
+	
 	public int[] getAnswers() {
 		return answers;
 	}
@@ -42,7 +43,7 @@ public abstract class Question {
 	}
 
 	public abstract void generateQuestion();
-
+	
 	private void generateCorrectAnswer() {
 		switch (symbol) {
 		case '+':
@@ -88,7 +89,8 @@ public abstract class Question {
 	
 	protected void generateUniqueNumbersForSubtraction(){
 		firstNumber = randomGenerator.nextInt(100);
-		secondNumber = randomGenerator.nextInt(firstNumber);
+		int save = firstNumber;
+		secondNumber = randomGenerator.nextInt(save++);
 	}
 	
 	protected void generateUniqueNumbersForMultiplication(){

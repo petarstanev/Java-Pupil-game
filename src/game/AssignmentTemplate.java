@@ -1,10 +1,7 @@
 package game;
 
-import java.util.ArrayList;
-
 import javafx.application.Application;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -13,13 +10,10 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
-import javafx.scene.control.ToggleButton;
-import javafx.scene.control.ToggleGroup;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
@@ -30,7 +24,7 @@ public class AssignmentTemplate extends Application {
 
 	private Scene scene;
 	private TabPane root;
-	private BorderPane tab1Pane;
+	private BorderPane tab1Pane, tab2Pane;
 	private Tab tab1, tab2;
 	private Label questionLabel, scoreLabel, difficultyLabel, livesLabel;
 	private Button answersButtons[] = new Button[4];
@@ -54,6 +48,9 @@ public class AssignmentTemplate extends Application {
 		// ---Top Start
 		tab1Pane = new BorderPane();
 
+		tab1Pane.setStyle("-fx-background-color: #FFFF99;");
+
+		tab2Pane = new BorderPane();
 		// ----Top End
 
 		setUpStartScreen();
@@ -69,39 +66,57 @@ public class AssignmentTemplate extends Application {
 
 		// ----------------------------------
 		tab2 = new Tab();
-		tab2.setText("Score");
+
+		tab2.setText("Tutorial");
 		tab2.setClosable(false);
+		tab2.setContent(tab2Pane);
+		setTab2();
 		root.getTabs().add(tab2);
 		// ----------------------------------
 		stage.show();
-
 	}
-	
-	private void firstTimeStart(){
+
+	private void setTab2() {
+		Label title = new Label("   How to play:");
+		title.setStyle("-fx-font: 42 arial; -fx-base: #b6e7c9;");
+		BorderPane.setAlignment(title, Pos.CENTER);
+		Image img = new Image("tutorial1.png", 700, 500, false, false);
+		ImageView imgView = new ImageView(img);
+
+		tab2Pane.setCenter(imgView);
+
+		tab2Pane.setTop(title);
+	}
+
+	private void topInit() {
+		score=0;
 		scoreLabel = new Label("Score: " + score);
-		scoreLabel.setStyle("-fx-font: 32 arial; -fx-base: #b6e7c9;");
-		
+		scoreLabel.setStyle("-fx-font: 32 arial;");
+		scoreLabel.setTextFill(Color.web("#199EFF"));
+
 		lives = 3;
 		livesLabel = new Label("Lives: " + lives);
-		livesLabel.setStyle("-fx-font: 32 arial; -fx-base: #b6e7c9;");
-		
-		difficultyLabel = new Label( getDifficultyOperations());
-		difficultyLabel.setStyle("-fx-font: 32 arial; -fx-base: #b6e7c9;");
+		livesLabel.setStyle("-fx-font: 32 arial;");
+		livesLabel.setTextFill(Color.web("#199EFF"));
+
+		difficulty = 0;
+		difficultyLabel = new Label(getDifficultyOperations());
+		difficultyLabel.setStyle("-fx-font: 32 arial; -fx-base: #EFFFF3;");
+		difficultyLabel.setTextFill(Color.web("#199EFF"));
 		topPane = new BorderPane();
 		topPane.setLeft(difficultyLabel);
 		topPane.setRight(scoreLabel);
 		topPane.setCenter(livesLabel);
 		tab1Pane.setTop(topPane);
-		//topPane.setVisible(false);
+		// topPane.setVisible(false);
 	}
 
 	public void setUpStartScreen() {
-		
-		
-		BorderPane menu = new BorderPane();
-		Button startGameButton = new Button("startGame");
-		startGameButton.setStyle("-fx-font: 48 arial; -fx-base: #b6e7c9;");
 
+		BorderPane menu = new BorderPane();
+		Button startGameButton = new Button("Start Game");
+		startGameButton.setStyle("-fx-font: 48 arial;fx-base: #EFFFF3;");
+		startGameButton.setTextFill(Color.web("#199EFF"));
 		startGameButton.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -112,21 +127,20 @@ public class AssignmentTemplate extends Application {
 		menu.setCenter(startGameButton);
 
 		tab1Pane.setCenter(menu);
-		
+
 	}
-	
+
 	public void setUpGame() {
-		firstTimeStart();
+		topInit();
 		questionLabel = new Label();
-		questionLabel.setStyle("-fx-font: 48 arial; -fx-base: #b6e7c9;");
+		questionLabel.setStyle("-fx-font: 60 arial;");
+		questionLabel.setTextFill(Color.web("#199EFF"));
 		tab1Pane.setCenter(questionLabel);
 		// ----- Top end
 
 		// ---- Left Start
-		
-		
-		
-		//tab1Pane.setRight(livesLabel);
+
+		// tab1Pane.setRight(livesLabel);
 		// ---Left end
 
 		// ------ Bottom start
@@ -138,24 +152,27 @@ public class AssignmentTemplate extends Application {
 		for (int i = 0; i < answersButtons.length; i++) {
 			answersButtons[i] = new Button();
 			answersButtons[i]
-					.setStyle("-fx-font: 48 arial; -fx-base: #b6e7c9;");
+					.setStyle("-fx-font: 48 arial; -fx-base: #D6FFEA;");
+			answersButtons[i].setTextFill(Color.web("#199EFF"));
 			answersBox.getChildren().add(answersButtons[i]);
 		}
 
 		// other
 		difficulty = 0;
 		counter = 0;
-		
+		score = 0;
+
 		questionFactory = new QuestionFactory();
 		generateQuestion();
 	}
 
 	public void generateQuestion() {
-		Question question = questionFactory.getQuestion(difficulty);
+		Question question = questionFactory.createQuestion(difficulty);
 		questionLabel.setText(question.getQuestion());
 
 		for (int i = 0; i < answersButtons.length; i++) {
 			answersButtons[i].setText(Integer.toString(question.getAnswer(i)));
+			answersButtons[i].setDisable(false);
 			if (i == question.getCorrectAnswerPositon()) {
 				answersButtons[i].setOnAction(new EventHandler<ActionEvent>() {
 					@Override
@@ -172,11 +189,14 @@ public class AssignmentTemplate extends Application {
 					}
 				});
 			} else {
-				// score--
+				final int n = i;
 				answersButtons[i].setOnAction(new EventHandler<ActionEvent>() {
 					@Override
 					public void handle(ActionEvent event) {
+						answersButtons[n].setDisable(true);
 						lives--;
+						counter = 0;
+
 						updateLives();
 						if (lives < 1) {
 							setUpStartScreen();
@@ -194,24 +214,23 @@ public class AssignmentTemplate extends Application {
 	}
 
 	private void updateDifficulty() {
-		difficultyLabel.setText( getDifficultyOperations());
+		difficultyLabel.setText(getDifficultyOperations());
 	}
-	
+
 	private void updateLives() {
 		livesLabel.setText("Lives: " + lives);
 	}
-	
+
 	private String getDifficultyOperations() {
 		switch (difficulty) {
 		case 0:
 			return "Easy (+)";
 		case 1:
-			return "Normal (+ -)";
+			return "Medium (+ -)";
 		case 2:
 			return "Hardest (+ - * /)";
 		}
 		return "";
 	}
-	
-	
+
 }

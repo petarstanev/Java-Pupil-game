@@ -1,9 +1,9 @@
 package game;
 
-public class QuestionFactory {
+public class QuestionFactory implements FactoryInterface{
 	Question question = null;
 
-	public Question getQuestion(int difficulty) {
+	public Question createQuestion(int difficulty) {
 		switch (difficulty) {
 		case 0:
 			return question = new EasyQuestion();
