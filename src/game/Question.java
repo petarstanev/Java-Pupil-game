@@ -10,7 +10,8 @@ import java.util.Random;
  */
 public class Question {
 	private int answers[];
-	private int firstNumber, secondNumber, correctAnswer,correctAnswerPositon, maximumNumber;
+	private int firstNumber, secondNumber, correctAnswer, correctAnswerPositon;
+	private int maximumNumber, difficulty;
 	private char symbol;
 	private Random randomGenerator;
 
@@ -19,9 +20,10 @@ public class Question {
 		this.correctAnswer = correctAnswer;
 	}
 
-	public Question(int maximumNumber) {
+	public Question(int maximumNumber, int difficulty) {
 		randomGenerator = new Random();
 		this.maximumNumber = maximumNumber;
+		this.difficulty = difficulty;
 		generateQuestion();
 		generateCorrectAnswer();
 		generateAnswers();
@@ -38,7 +40,7 @@ public class Question {
 	public int getCorrectAnswer() {
 		return correctAnswer;
 	}
-	
+
 	public int getCorrectAnswerPositon() {
 		return correctAnswerPositon;
 	}
@@ -51,8 +53,11 @@ public class Question {
 
 		firstNumber = randomGenerator.nextInt(maximumNumber);
 		secondNumber = randomGenerator.nextInt(maximumNumber);
-
-		switch (randomGenerator.nextInt(3)) {
+	
+		int test = difficulty;
+		test++;
+	
+		switch (randomGenerator.nextInt(test)) {
 		case 0:
 			symbol = '+';
 			break;
@@ -99,7 +104,7 @@ public class Question {
 	private int generateUniqueAnswer() {
 		int testAnswer;
 		do {
-			testAnswer = randomGenerator.nextInt(maximumNumber*2);
+			testAnswer = randomGenerator.nextInt(maximumNumber * 2);
 		} while (contains(testAnswer));
 
 		return testAnswer;
