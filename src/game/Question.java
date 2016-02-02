@@ -73,8 +73,9 @@ public abstract class Question {
 
 	private int generateUniqueAnswer() {
 		int testAnswer;
+		correctAnswer++;
 		do {
-			testAnswer = randomGenerator.nextInt((int) (MAX_NUMBER * 1.5));
+			testAnswer = randomGenerator.nextInt((int) (correctAnswer * 2));
 		} while (contains(testAnswer));
 
 		return testAnswer;
@@ -109,5 +110,4 @@ public abstract class Question {
 		}
 		return false;
 	}
-
 }
